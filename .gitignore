@@ -1,3 +1,5 @@
 *.mp4
 data/*.mp3
 data/*.mp3.txt
+*.txt
+*.tmp

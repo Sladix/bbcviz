@@ -57,7 +57,7 @@ class Particle {
     if (lifespan < 0.0) {
       return true;
     } else {
-      return false;
+      return position.x < 0 || position.x > width || position.y < 0 || position.y > height;
     }
   }
 }

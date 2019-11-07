@@ -19,7 +19,7 @@ FFT fft;
 
 float BPM = 150.;
 int songOffset = 160;
-float beat = 1;
+float beat = 0;
 int temp = 0;
 
 String SEP = "|";
@@ -161,17 +161,17 @@ void draw()
     //int tlim = (p.length-1)/2;
     
     while (videoExport.getCurrentTime() < soundTime + frameDuration) {
-      
-      int et = int((videoExport.getCurrentTime() * 1000.)) - songOffset;
-      boolean onBeat = et % interval <= 10;
+      float vt = videoExport.getCurrentTime() * 1000.;
+      int et = int(vt) - songOffset;
+      boolean onBeat = vt > songOffset && et % interval <= 10;
       
       if(onBeat){
-        beat++;
         // On compte les temps  
         temp = int(beat % 4 + 1);
         if(temp == 3 && beat >= 78 && scoreHi > 0.5){
           ps.changeOffsets();
         }
+        beat++;
       }
       
       currentLow = (scoreLow > currentLow) ? scoreLow : currentLow-DROP_OFF;
@@ -200,15 +200,6 @@ void draw()
       }
       */
       
-      // Tous les 3 temps
-      /*
-      if(temp == 3){
-        fill(color(255,0,0));
-        ellipse(width/2, height/2, 200., 200.);
-        fill(255);
-        text(int(beat), width/2, height/2);
-      }
-      */
       
       /*** BEGIN DRAW ***/
       background(0);
@@ -238,7 +229,19 @@ void draw()
       image(rectImg2,(v.x)*3, v.y, s, s);
       popMatrix();
       
+      // Titre
       image(title, width/2, height/2);
+      
+      
+      
+      // Tous les 3 temps      
+      /*if(temp == 3){
+        fill(color(255,0,0));
+        ellipse(width/2, height/2, 200., 200.);
+        fill(255);
+        text(int(beat), width/2, height/2);
+        text(int(temp), width/2, height/2+20);
+      }*/
       
       imageMode(CORNER);
       fx.render()
