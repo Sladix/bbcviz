@@ -24,7 +24,7 @@ class ParticleSystem {
       }
     }
     cx += 1337;
-    cy += 9331;
+    cy += 7331;
     for (int i = particles.size()-1; i >= 0; i--) {
       Particle p = particles.get(i);
       p.xOff = cx;

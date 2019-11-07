@@ -165,10 +165,10 @@ void draw()
       int et = int(vt) - songOffset;
       boolean onBeat = vt > songOffset && et % interval <= 10;
       
-      if(onBeat){
+      if (onBeat) {
         // On compte les temps  
         temp = int(beat % 4 + 1);
-        if(temp == 3 && beat >= 78 && scoreHi > 0.5){
+        if (temp == 3 && beat >= 78 && scoreHi > 0.4) {
           ps.changeOffsets();
         }
         beat++;
@@ -309,9 +309,9 @@ void audioToTextFile(String fileName, int[] bands) {
     // the end of the line.
     msg.append(nf(chunkStartIndex/sampleRate, 0, 3).replace(',', '.'));
     for (int i=0; i<fftSlices; ++i) {
-      for(int j = 0; j < maxs.length; j++){
+      for (int j = 0; j < maxs.length; j++) {
         float sum = fftL.getAvg(i) + fftR.getAvg(i);
-        if(i >= bands[j*2] && i/2 <= bands[j*2+1] && sum > maxs[j]){
+        if(i >= bands[j*2] && i/2 <= bands[j*2+1] && sum > maxs[j]) {
           maxs[j] = sum;
         }
       }
@@ -322,7 +322,7 @@ void audioToTextFile(String fileName, int[] bands) {
     msg.append(System.getProperty("line.separator"));
   }
   StringBuilder max = new StringBuilder();
-  for(int aa = 0; aa < maxs.length; aa++){
+  for(int aa = 0; aa < maxs.length; aa++) {
     max.append(nf(maxs[aa], 0, 4).replace(',', '.')+SEP);
   }
   max.deleteCharAt(max.length()-1);
