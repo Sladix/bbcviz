@@ -2,8 +2,8 @@ class ParticleSystem {
   ArrayList<Particle> particles;
   PImage image;
   PVector origin;
-  int numParts = 50;
-  int limitParticles = 2000;
+  int numParts = 10;
+  int limitParticles = 100;
   
   float cx = 0, cy = 0;
 
@@ -17,12 +17,16 @@ class ParticleSystem {
     particles.add(new Particle(origin.copy().add(new PVector(random(-diam,diam),random(-diam,diam))), image));
   }
   
-  void changeOffsets(){
+  void popParticles(){
     if(this.particles.size() < limitParticles){
       for(int i = 0; i < numParts; i++){
         addParticle(200);
       }
     }
+  }
+  
+  void changeOffsets(){
+    if(particles.size() < 1) return;
     cx += 1337;
     cy += 7331;
     for (int i = particles.size()-1; i >= 0; i--) {
@@ -30,6 +34,13 @@ class ParticleSystem {
       p.xOff = cx;
       p.yOff = cy;
       p.velocity.add(new PVector(random(-20,20), random(-20,20)));
+    }
+  }
+  
+  void display(){
+    for (int i = particles.size()-1; i >= 0; i--) {
+      Particle p = particles.get(i);
+      p.display();
     }
   }
 

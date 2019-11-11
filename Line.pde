@@ -20,16 +20,22 @@ class Line{
     }
   }
   
-  void run(){
-    update();
+  void run(ArrayList<Particle> particles){
+    update(particles);
     display();
   }
   
-  void update(){
+  void update(ArrayList<Particle> particles){
     for(int i = 0; i < res+1; i++){
       float nv = noise(points[i].x * ns, start.y * ns + oy);
       float nx = map(nv, 0 ,1, -1, 1);
       points[i].y = start.y + nx * 100 + random(currentLow*(h/2));
+      for (Particle p : particles) {
+        if(p.position.dist(new PVector(points[i].x, points[i].y)) < 50){
+          points[i].y += 20;
+          break;
+        }
+      }
     }
     oy -= 0.001+currentLow*0.01;
   }

@@ -16,7 +16,6 @@ class Particle {
 
   void run() {
     update();
-    display();
   }
 
   // Method to update location

@@ -16,10 +16,10 @@ class Background{
     }
   }
   
-  void run(){
+  void run(ArrayList<Particle> particles){
     for (int i = lines.size()-1; i >= 0; i--) {
       Line l = lines.get(i);
-      l.run();
+      l.run(particles);
     }
   }
 }

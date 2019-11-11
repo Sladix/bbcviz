@@ -45,7 +45,7 @@ int numLines = 60;
 Background bg;
 
 // Images
-PImage rectImg2, rectImg2Reverse, face1, face1Reverse, title;
+PImage pureel, pureer, truffl, truffr, title;
 PImage bill;
 //PVector[] facesPos = ;
 
@@ -79,7 +79,7 @@ void setup()
   //Faire afficher en 2D sur tout l'écran
   //fullScreen(P2D);
   //size(1920, 1080, P2D);
-  size(600, 400, P2D);
+  size(1080, 720, P2D);
   imageMode(CENTER);
   smooth(10);
   frameRate(1000);
@@ -91,9 +91,11 @@ void setup()
   videoExport.setQuality(100, 128);
   videoExport.setAudioFileName("cash.mp3");
   bill = loadImage("dollarbill.jpg");
-  rectImg2 = loadImage("bbc.png");
-  face1 = loadImage("face11.png");
-  title = loadImage("title.png");
+  pureel = loadImage("pureel.png");
+  pureer = loadImage("pureer.png");
+  truffl = loadImage("truffl.png");
+  truffr = loadImage("truffr.png");
+  title = loadImage("title_old.png");
   
   //Particle systems
   ps = new ParticleSystem(new PVector(width/2, height/2), bill);
@@ -128,6 +130,10 @@ void setup()
     maxs[ii] = float(p[ii]);
   }
  
+}
+
+float Easing(float x, float t,float b,float c,float d) {
+  return b+c*x;
 }
 
 void draw()
@@ -166,10 +172,13 @@ void draw()
       boolean onBeat = vt > songOffset && et % interval <= 10;
       
       if (onBeat) {
+        ps.changeOffsets();
         // On compte les temps  
         temp = int(beat % 4 + 1);
-        if (temp == 3 && beat >= 78 && scoreHi > 0.4) {
-          ps.changeOffsets();
+        if (temp == 3 && beat >= 78*/) {
+          if(scoreHi > 0.4){
+            ps.popParticles();
+          }
         }
         beat++;
       }
@@ -205,32 +214,52 @@ void draw()
       background(0);
       noStroke();
       
-      bg.run();
       
-      pushMatrix();
-      int faceSize = 200;
-      float offset = faceSize/4;
-      //tint(255, int(map(currentHi, 0, 1, 0, 255)));
-      image(face1, width-(faceSize/2)*2, height+faceSize/2 - offset - map(currentHi, 0, 1, 0, faceSize-offset), faceSize, faceSize);
-      // replace with facing right
-      image(face1, (faceSize/2)*2, height+faceSize/2  - offset - map(currentHi, 0, 1, 0, faceSize-offset), faceSize, faceSize);
-      popMatrix();
-      
+      // Particles run
       ps.run();
+      // Background run and draw
+      bg.run(ps.particles);
       
-      pushMatrix();
       noTint();
-      float s = max(currentLow*height, 100.0);
+      // MIDDLE
+      pushMatrix();
+      float ratioPuree = float(pureel.height)/(float(pureel.width)*1.3);
+      float s = max(currentLow*(height/2), 70);
       float ox = width/4;
       float oy = height/2;
       PVector v = new PVector(ox, oy);
-      image(rectImg2, v.x, v.y, s, s);
-      // replace with facing left
-      image(rectImg2,(v.x)*3, v.y, s, s);
+      image(pureel, v.x, v.y, s/ratioPuree, s);
+      image(pureer,(v.x)*3, v.y, s/ratioPuree, s);
       popMatrix();
       
+      // BOTTOM
+      pushMatrix();
+      float ratioTruff = float(truffl.height)/float(truffl.width);
+      float faceSize =  200;
+      //tint(255, int(map(currentHi, 0, 1, 0, 255)));
+      float ty = map(constrain(currentHi*1.5, 0, 1), 0, 1, height+faceSize/2, height-faceSize/2);
+      image(truffr, width-(faceSize/2)*2, ty, faceSize/ratioTruff, faceSize);
+      image(truffl, (faceSize/2)*2, ty, faceSize/ratioTruff, faceSize);
+      popMatrix();
+      
+      
+      pushMatrix();
+      fill(0);
+      noStroke();
+      rectMode(CENTER);
+      translate(width/2, height/2);
+      rect(0, 0, title.width+70, title.height+70);
+      popMatrix();
+      
+      ps.display();
+      
       // Titre
-      image(title, width/2, height/2);
+      pushMatrix();
+      translate(width/2, height/2);
+      scale(1+pow(currentMid,4)*0.5, 1+pow(currentMid,4)*0.5);
+      noTint();
+      image(title, 0, 0);
+      popMatrix();
       
       
       
@@ -249,6 +278,24 @@ void draw()
         .noise(.05,.05)
         .compose();
       imageMode(CENTER);
+      
+      /** DEBUG **/
+      pushMatrix();
+      StringBuilder indicator = new StringBuilder();
+      indicator.append(String.format("%.2f", videoExport.getCurrentTime()));
+      indicator.append("/");
+      indicator.append(song.length()/1000);
+      fill(255);
+      textMode(CENTER);
+      text(indicator.toString(), 10,20);
+      indicator.setLength(0);
+      indicator.append(temp);
+      indicator.append("|");
+      indicator.append(beat);
+      text(indicator.toString(), 10,50);
+      popMatrix();
+      /** END DEBUG **/
+      
       
       /*** END DRAW ***/
 
