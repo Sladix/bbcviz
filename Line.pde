@@ -5,7 +5,8 @@ class Line{
   PVector[] points;
   float h;
   float ns = 0.005;
-  float oy = 0;
+  color c = color(150, 0, 0);
+  float maxDist = 50;
   
   Line(PVector _start, PVector _end, int _res, float _h){
     res = _res;
@@ -20,29 +21,27 @@ class Line{
     }
   }
   
-  void run(ArrayList<Particle> particles){
-    update(particles);
+  void run(ArrayList<Particle> particles, float oy){
+    update(particles, oy);
     display();
   }
   
-  void update(ArrayList<Particle> particles){
+  void update(ArrayList<Particle> particles, float oy){
     for(int i = 0; i < res+1; i++){
       float nv = noise(points[i].x * ns, start.y * ns + oy);
       float nx = map(nv, 0 ,1, -1, 1);
-      points[i].y = start.y + nx * 100 + random(currentLow*(h/2));
+      points[i].y = start.y + nx * 100 + random(currentLow*(h/4));
       for (Particle p : particles) {
         if(p.position.dist(new PVector(points[i].x, points[i].y)) < 50){
-          points[i].y += 20;
+          points[i].y += pow(currentHi, 2)*maxDist;
           break;
         }
       }
     }
-    oy -= 0.001+currentLow*0.01;
   }
   
   void display(){
     pushMatrix();
-    color c = color(50+currentMid*205, 0, 0);
     noFill();
     stroke(c);
     beginShape();

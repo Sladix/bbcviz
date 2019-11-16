@@ -2,8 +2,8 @@ class ParticleSystem {
   ArrayList<Particle> particles;
   PImage image;
   PVector origin;
-  int numParts = 10;
-  int limitParticles = 100;
+  int numParts = 50;
+  int limitParticles = 500;
   
   float cx = 0, cy = 0;
 

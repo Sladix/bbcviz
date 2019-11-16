@@ -3,7 +3,8 @@ class Particle {
   PVector velocity;
   PVector acceleration;
   PImage image;
-  float lifespan= 500.0;
+  float maxLifespan = 500;
+  float lifespan;
   
   float xOff = 0, yOff = 0;
 
@@ -12,6 +13,7 @@ class Particle {
     velocity = new PVector(0, 0);
     position = pos.copy();
     this.image = image;
+     lifespan = random(maxLifespan);
   }
 
   void run() {
@@ -35,18 +37,16 @@ class Particle {
     position.add(velocity);
     velocity.mult(0.9);
     acceleration.mult(0);
-    lifespan -= 1.0;
+    lifespan--;
   }
 
   // Method to display
   void display() {
-    stroke(255, lifespan);
-    fill(255, lifespan);
     //ellipse(position.x, position.y, log(scoreMid)*3, log(scoreMid)*3);
     pushMatrix();
     translate(position.x, position.y);
     rotate(velocity.heading() + PI);
-    tint(255, lifespan);
+    tint(255, map(lifespan, 0, maxLifespan, 0 ,255));
     image(image, 0, 0, bill.width/6, bill.height/6);
     popMatrix();
   }
